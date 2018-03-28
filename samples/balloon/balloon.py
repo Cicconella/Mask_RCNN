@@ -78,6 +78,12 @@ class BalloonConfig(Config):
     # Skip detections with < 90% confidence
     DETECTION_MIN_CONFIDENCE = 0.9
 
+class DSBConfig(Config):
+    NAME = "DSB"
+    IMAGES_PER_GPU = 5
+    NUM_CLASSES = 2
+    STEPS_PER_EPOCH = 600
+    DETECTION_MIN_CONFIDENCE = 0.9
 
 ############################################################
 #  Dataset
@@ -147,6 +153,10 @@ class BalloonDataset(utils.Dataset):
             one mask per instance.
         class_ids: a 1D array of class IDs of the instance masks.
         """
+
+        for mask_file in next(os.walk(path + '/masks/'))[2]:
+            mask_ = imread(path + '/masks/' + mask_file)
+
         # If not a balloon dataset image, delegate to parent class.
         image_info = self.image_info[image_id]
         if image_info["source"] != "balloon":
@@ -161,6 +171,78 @@ class BalloonDataset(utils.Dataset):
             # Get indexes of pixels inside the polygon and set them to 1
             rr, cc = skimage.draw.polygon(p['all_points_y'], p['all_points_x'])
             mask[rr, cc, i] = 1
+
+        # Return mask, and array of class IDs of each instance. Since we have
+        # one class ID only, we return an array of 1s
+        return mask, np.ones([mask.shape[-1]], dtype=np.int32)
+
+    def image_reference(self, image_id):
+        """Return the path of the image."""
+        info = self.image_info[image_id]
+        if info["source"] == "balloon":
+            return info["path"]
+        else:
+            super(self.__class__, self).image_reference(image_id)
+
+class DSBDataset(utils.Dataset):
+
+    def load_dsb(self, dataset_dir, subset):
+        """Load a subset of the Balloon dataset.
+        dataset_dir: Root directory of the dataset.
+        subset: Subset to load: train or val
+        """
+        # Add classes. We have only one class to add.
+        self.add_class("nucleo", 1, "nucleo")
+
+        # Train or validation dataset?
+        dataset_dir = os.path.join(dataset_dir, "TRAIN")
+
+        #Listar quais exames tem
+
+        exames = next(os.walk(dataset_dir))[1]
+
+        if subset=="Train":
+            exames = exames[:600]
+        else:
+            exames = exames[600:]
+
+        #Acessar a pasta exame/image
+
+        for n, id_ in tqdm(enumerate(exames), total=len(exames)):
+            path = dataset_dir + id_
+
+            self.add_image(
+                "dsb",
+                image_id=id_,  # use file name as a unique image id
+                path=path + '/images/' + id_ + '.png', dir=path,
+            )
+
+
+
+
+    def load_mask(self, image_id):
+        """Generate instance masks for an image.
+       Returns:
+        masks: A bool array of shape [height, width, instance count] with
+            one mask per instance.
+        class_ids: a 1D array of class IDs of the instance masks.
+        """
+
+        # If not a balloon dataset image, delegate to parent class.
+        image_info = self.image_info[image_id]
+        if image_info["source"] != "dsb":
+            return super(self.__class__, self).load_mask(image_id)
+
+        path = image_info["dir"]
+
+        mascara = next(os.walk(path + '/masks/'))[2]
+        masc = imread(path + '/masks/' + mascara[0])
+        height, width = masc.shape()
+
+        mask = np.zeros(height, width, len(mascara)], dtype=np.uint8)
+
+        for i, mask_file in enumerate(mascara):
+            mask[:,:,i] = imread(path + '/masks/' + mask_file)
 
         # Return mask, and array of class IDs of each instance. Since we have
         # one class ID only, we return an array of 1s
@@ -314,15 +396,16 @@ if __name__ == '__main__':
 
     # Configurations
     if args.command == "train":
-        config = BalloonConfig()
+        config = DSBConfig()
     else:
-        class InferenceConfig(BalloonConfig):
+        class InferenceConfig(DSBConfig):
             # Set batch size to 1 since we'll be running inference on
             # one image at a time. Batch size = GPU_COUNT * IMAGES_PER_GPU
             GPU_COUNT = 1
             IMAGES_PER_GPU = 1
         config = InferenceConfig()
     config.display()
+
 
     # Create model
     if args.command == "train":
