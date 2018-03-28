@@ -32,7 +32,8 @@ import sys
 import json
 import datetime
 import numpy as np
-import skimage.draw
+import skimage
+from tqdm import tqdm
 
 # Root directory of the project
 ROOT_DIR = os.getcwd()
@@ -217,9 +218,6 @@ class DSBDataset(utils.Dataset):
                 path=path + '/images/' + id_ + '.png', dir=path,
             )
 
-
-
-
     def load_mask(self, image_id):
         """Generate instance masks for an image.
        Returns:
@@ -236,13 +234,13 @@ class DSBDataset(utils.Dataset):
         path = image_info["dir"]
 
         mascara = next(os.walk(path + '/masks/'))[2]
-        masc = imread(path + '/masks/' + mascara[0])
+        masc = skimage.io.imread(path + '/masks/' + mascara[0])
         height, width = masc.shape()
 
-        mask = np.zeros(height, width, len(mascara)], dtype=np.uint8)
+        mask = np.zeros(height, width, len(mascara), dtype=np.uint8)
 
         for i, mask_file in enumerate(mascara):
-            mask[:,:,i] = imread(path + '/masks/' + mask_file)
+            mask[:,:,i] = skimage.io.imread(path + '/masks/' + mask_file)
 
         # Return mask, and array of class IDs of each instance. Since we have
         # one class ID only, we return an array of 1s
@@ -260,13 +258,13 @@ class DSBDataset(utils.Dataset):
 def train(model):
     """Train the model."""
     # Training dataset.
-    dataset_train = BalloonDataset()
-    dataset_train.load_balloon(args.dataset, "train")
+    dataset_train = DSBDataset()
+    dataset_train.load_dsb(args.dataset, "Train")
     dataset_train.prepare()
 
     # Validation dataset
-    dataset_val = BalloonDataset()
-    dataset_val.load_balloon(args.dataset, "val")
+    dataset_val = DSBDataset()
+    dataset_val.load_dsb(args.dataset, "val")
     dataset_val.prepare()
 
     # *** This training schedule is an example. Update to your needs ***
