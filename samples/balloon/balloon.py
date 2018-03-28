@@ -83,7 +83,7 @@ class DSBConfig(Config):
     NAME = "DSB"
     IMAGES_PER_GPU = 5
     NUM_CLASSES = 2
-    STEPS_PER_EPOCH = 600
+    STEPS_PER_EPOCH = 100
     DETECTION_MIN_CONFIDENCE = 0.9
 
 ############################################################
@@ -274,7 +274,7 @@ def train(model):
     print("Training network heads")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=30,
+                epochs=10,
                 layers='heads')
 
 
