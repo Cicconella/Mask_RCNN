@@ -193,10 +193,10 @@ class DSBDataset(utils.Dataset):
         subset: Subset to load: train or val
         """
         # Add classes. We have only one class to add.
-        self.add_class("nucleo", 1, "nucleo")
+        self.add_class("dsb", 1, "nucleo")
 
         # Train or validation dataset?
-        dataset_dir = os.path.join(dataset_dir, "TRAIN")
+        dataset_dir = os.path.join(dataset_dir, "TRAIN/")
 
         #Listar quais exames tem
 
@@ -235,9 +235,9 @@ class DSBDataset(utils.Dataset):
 
         mascara = next(os.walk(path + '/masks/'))[2]
         masc = skimage.io.imread(path + '/masks/' + mascara[0])
-        height, width = masc.shape()
+        height, width = masc.shape
 
-        mask = np.zeros(height, width, len(mascara), dtype=np.uint8)
+        mask = np.zeros((height, width, len(mascara)), dtype=np.uint8)
 
         for i, mask_file in enumerate(mascara):
             mask[:,:,i] = skimage.io.imread(path + '/masks/' + mask_file)
@@ -249,7 +249,7 @@ class DSBDataset(utils.Dataset):
     def image_reference(self, image_id):
         """Return the path of the image."""
         info = self.image_info[image_id]
-        if info["source"] == "balloon":
+        if info["source"] == "dsb":
             return info["path"]
         else:
             super(self.__class__, self).image_reference(image_id)
