@@ -197,7 +197,7 @@ class DSBDataset(utils.Dataset):
         self.add_class("dsb", 1, "nucleo")
 
         # Train or validation dataset?
-        if subset == "Train" or subset == "val":
+        if subset == "train" or subset == "val":
             dataset_dir = os.path.join(dataset_dir, "TRAIN/")
         elif subset == 'test':
             dataset_dir = os.path.join(dataset_dir, "TEST/")
@@ -265,7 +265,7 @@ def train(model):
     """Train the model."""
     # Training dataset.
     dataset_train = DSBDataset()
-    dataset_train.load_dsb(args.dataset, "Train")
+    dataset_train.load_dsb(args.dataset, "train")
     dataset_train.prepare()
 
     # Validation dataset
@@ -287,7 +287,7 @@ def test(model):
     """Train the model."""
     # Training dataset.
     dataset_test = DSBDataset()
-    dataset_test.load_dsb(args.dataset, "Test")
+    dataset_test.load_dsb(args.dataset, "test")
     dataset_test.prepare()
 
     # *** This training schedule is an example. Update to your needs ***
