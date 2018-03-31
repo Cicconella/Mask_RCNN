@@ -206,7 +206,7 @@ class DSBDataset(utils.Dataset):
         #Listar quais exames tem
         exames = next(os.walk(dataset_dir))[1]
 
-        if subset=="Train":
+        if subset=="train":
             exames = exames[:600]
         elif subset == "val":
             exames = exames[600:]
@@ -303,7 +303,13 @@ def test(model):
         image = skimage.io.imread(im_path)
         # Detect objects
         r = model.detect([image], verbose=1)[0]
-        print(r['masks'].shape)
+        s = r['masks'].shape
+        if s[0]==0:
+            continue
+        for nuc in range(len(s[2])):
+            m = r['masks'][:,:,nuc]
+            print(rle_encoding(m))
+
 
 def rle_encoding(x):
     dots = np.where(x.T.flatten() == 1)[0]
