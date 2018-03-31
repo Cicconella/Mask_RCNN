@@ -297,6 +297,7 @@ def test(model):
     print("Testing on dataset")
 
     output = open("sub.csv","w")
+    output.write("ImageId,EncodedPixels\n")
     for im in dataset_test.image_ids:
         # Run model detection and generate the color splash effect
         print("Running on {}".format(im))
