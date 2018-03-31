@@ -311,7 +311,7 @@ def test(model):
             continue
         for nuc in range(s[2]):
             m = r['masks'][:,:,nuc]
-            l = rle_encoding(m).apply(lambda x: ' '.join(str(y) for y in x))
+            l = ' '.join([ str(x) for x in rle_encoding(m)])
             strin = "%s,%s" % (im_name, l)
             print(strin)
             output.write(strin+"\n")
