@@ -302,7 +302,7 @@ def test(model):
         print("Running on {}".format(im))
         # Read image
         im_path = dataset_test.image_info[im]["path"]
-        im_name = dataset_test.image_info[im]["image_id"]
+        im_name = dataset_test.image_info[im]["id"]
         image = skimage.io.imread(im_path)
         # Detect objects
         r = model.detect([image], verbose=0)[0]
