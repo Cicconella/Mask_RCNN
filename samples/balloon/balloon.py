@@ -295,11 +295,14 @@ def test(model):
     # COCO trained weights, we don't need to train too long. Also,
     # no need to train all layers, just the heads should do it.
     print("Testing on dataset")
+
+    output = open("sub.csv","w")
     for im in dataset_test.image_ids:
         # Run model detection and generate the color splash effect
         print("Running on {}".format(im))
         # Read image
         im_path = dataset_test.image_info[im]["path"]
+        im_name = dataset_test.image_info[im]["image_id"]
         image = skimage.io.imread(im_path)
         # Detect objects
         r = model.detect([image], verbose=0)[0]
@@ -308,7 +311,9 @@ def test(model):
             continue
         for nuc in range(s[2]):
             m = r['masks'][:,:,nuc]
-            print(rle_encoding(m))
+            l = ' '.join(str(rle_encoding(m)))
+            print(im_name, l)
+            output.write("%s,%s" %(im_name, l) )
 
 
 def rle_encoding(x):
