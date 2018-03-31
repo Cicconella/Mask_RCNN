@@ -197,22 +197,27 @@ class DSBDataset(utils.Dataset):
         self.add_class("dsb", 1, "nucleo")
 
         # Train or validation dataset?
-        dataset_dir = os.path.join(dataset_dir, "TRAIN/")
-
+        if subset == "Train" or subset == "val":
+            dataset_dir = os.path.join(dataset_dir, "TRAIN/")
+        elif subset == 'test':
+            dataset_dir = os.path.join(dataset_dir, "TEST/")
+        else:
+            print("Invalid Subset",subset)
         #Listar quais exames tem
-
         exames = next(os.walk(dataset_dir))[1]
 
         if subset=="Train":
             exames = exames[:600]
-        else:
+        elif subset == "val":
             exames = exames[600:]
+        else:
+            # exames = exames
+            pass
+
 
         #Acessar a pasta exame/image
-
         for n, id_ in tqdm(enumerate(exames), total=len(exames)):
             path = dataset_dir + id_
-
             self.add_image(
                 "dsb",
                 image_id=id_,  # use file name as a unique image id
@@ -277,6 +282,38 @@ def train(model):
                 learning_rate=config.LEARNING_RATE,
                 epochs= config.EPOCHS,
                 layers='heads')
+
+def test(model):
+    """Train the model."""
+    # Training dataset.
+    dataset_test = DSBDataset()
+    dataset_test.load_dsb(args.dataset, "Test")
+    dataset_test.prepare()
+
+    # *** This training schedule is an example. Update to your needs ***
+    # Since we're using a very small dataset, and starting from
+    # COCO trained weights, we don't need to train too long. Also,
+    # no need to train all layers, just the heads should do it.
+    print("Testing on dataset")
+    for im in dataset_test.image_ids:
+        # Run model detection and generate the color splash effect
+        print("Running on {}".format(im))
+        # Read image
+        im_path = dataset_test.image_info[im]["path"]
+        image = skimage.io.imread(im_path)
+        # Detect objects
+        r = model.detect([image], verbose=1)[0]
+        print(r['masks'].shape)
+
+def rle_encoding(x):
+    dots = np.where(x.T.flatten() == 1)[0]
+    run_lengths = []
+    prev = -2
+    for b in dots:
+        if (b>prev+1): run_lengths.extend((b + 1, 0))
+        run_lengths[-1] += 1
+        prev = b
+    return run_lengths
 
 
 def color_splash(image, mask):
@@ -388,7 +425,10 @@ if __name__ == '__main__':
     elif args.command == "splash":
         assert args.image or args.video,\
                "Provide --image or --video to apply color splash"
-
+    elif args.command == "test":
+        assert args.dataset, \
+               "Provide --dataset to test"
+    print("Command:", args.command)
     print("Weights: ", args.weights)
     print("Dataset: ", args.dataset)
     print("Logs: ", args.logs)
@@ -404,7 +444,6 @@ if __name__ == '__main__':
             IMAGES_PER_GPU = 1
         config = InferenceConfig()
     config.display()
-
 
     # Create model
     if args.command == "train":
@@ -446,6 +485,8 @@ if __name__ == '__main__':
     elif args.command == "splash":
         detect_and_color_splash(model, image_path=args.image,
                                 video_path=args.video)
+    elif args.command == "test":
+        test(model)
     else:
         print("'{}' is not recognized. "
               "Use 'train' or 'splash'".format(args.command))
