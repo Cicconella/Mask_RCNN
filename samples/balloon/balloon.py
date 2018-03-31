@@ -302,11 +302,11 @@ def test(model):
         im_path = dataset_test.image_info[im]["path"]
         image = skimage.io.imread(im_path)
         # Detect objects
-        r = model.detect([image], verbose=1)[0]
+        r = model.detect([image], verbose=0)[0]
         s = r['masks'].shape
         if s[0]==0:
             continue
-        for nuc in range(len(s[2])):
+        for nuc in range(s[2]):
             m = r['masks'][:,:,nuc]
             print(rle_encoding(m))
 
