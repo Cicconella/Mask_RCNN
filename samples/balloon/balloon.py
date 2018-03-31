@@ -311,10 +311,12 @@ def test(model):
             continue
         for nuc in range(s[2]):
             m = r['masks'][:,:,nuc]
-            l = ' '.join(str(rle_encoding(m)))
-            print(im_name, l)
-            output.write("%s,%s" %(im_name, l) )
+            l = rle_encoding(m).apply(lambda x: ' '.join(str(y) for y in x))
+            strin = "%s,%s" % (im_name, l)
+            print(strin)
+            output.write(strin+"\n")
 
+    output.close()
 
 def rle_encoding(x):
     dots = np.where(x.T.flatten() == 1)[0]
