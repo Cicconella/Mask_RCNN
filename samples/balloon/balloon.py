@@ -329,8 +329,9 @@ def remove_all_overlaps(mask):
 
 def remove_overlap(m1,m2):
     inter = m1*m2
-    if max(inter) > 0:
-        print("Overlap entre mascaras, tamanho =",len(inter[inter>0]))
+    i =inter.flatten()
+    if max(i) > 0:
+        print("Overlap entre mascaras, tamanho =",len(i[i>0]))
     return m1-inter,m2
 
 def rle_encoding(x):
