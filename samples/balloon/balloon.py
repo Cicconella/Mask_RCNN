@@ -198,7 +198,7 @@ class DSBDataset(utils.Dataset):
 
         # Train or validation dataset?
         if subset == "train" or subset == "val":
-            dataset_dir = os.path.join(dataset_dir, "TRAIN/")
+            dataset_dir = os.path.join(dataset_dir, "TRAINCLAHE/")
         elif subset == 'test':
             dataset_dir = os.path.join(dataset_dir, "TEST/")
         else:
