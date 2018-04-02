@@ -74,7 +74,7 @@ class BalloonConfig(Config):
     NUM_CLASSES = 1 + 1  # Background + baloon
 
     # Number of training steps per epoch
-    STEPS_PER_EPOCH = 100
+    STEPS_PER_EPOCH = 10
 
     # Skip detections with < 90% confidence
     DETECTION_MIN_CONFIDENCE = 0.9
@@ -84,7 +84,7 @@ class DSBConfig(Config):
     IMAGES_PER_GPU = 5
     NUM_CLASSES = 2
     STEPS_PER_EPOCH = 100
-    EPOCHS = 100
+    EPOCHS = 150
     DETECTION_MIN_CONFIDENCE = 0.8
 
 ############################################################
