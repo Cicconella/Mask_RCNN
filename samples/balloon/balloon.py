@@ -84,8 +84,8 @@ class DSBConfig(Config):
     IMAGES_PER_GPU = 5
     NUM_CLASSES = 2
     STEPS_PER_EPOCH = 100
-    EPOCHS = 50
-    DETECTION_MIN_CONFIDENCE = 0.9
+    EPOCHS = 100
+    DETECTION_MIN_CONFIDENCE = 0.8
 
 ############################################################
 #  Dataset
@@ -281,7 +281,7 @@ def train(model):
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
                 epochs= config.EPOCHS,
-                layers='heads')
+                layers='all')
 
 def test(model):
     """Train the model."""
@@ -315,7 +315,6 @@ def test(model):
             m = mask[:,:,nuc]
             l = ' '.join([ str(x) for x in rle_encoding(m)])
             strin = "%s,%s" % (im_name, l)
-            print(strin)
             output.write(strin+"\n")
 
     output.close()
