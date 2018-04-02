@@ -307,17 +307,31 @@ def test(model):
         image = skimage.io.imread(im_path)
         # Detect objects
         r = model.detect([image], verbose=0)[0]
-        s = r['masks'].shape
+        mask = remove_all_overlaps(r['masks'])
+        s = mask.shape
         if s[0]==0:
             continue
         for nuc in range(s[2]):
-            m = r['masks'][:,:,nuc]
+            m = mask[:,:,nuc]
             l = ' '.join([ str(x) for x in rle_encoding(m)])
             strin = "%s,%s" % (im_name, l)
             print(strin)
             output.write(strin+"\n")
 
     output.close()
+
+def remove_all_overlaps(mask):
+    n = mask.shape[2]
+    for n1 in range(n):
+        for n2 in range(n1+1,n):
+            mask[:, :, n1],mask[:, :, n2] = remove_overlap(mask[:,:,n1], mask[:,:,n2])
+    return mask
+
+def remove_overlap(m1,m2):
+    inter = m1*m2
+    if max(inter) > 0:
+        print("Overlap entre mascaras, tamanho =",len(inter[inter>0]))
+    return m1-inter,m2
 
 def rle_encoding(x):
     dots = np.where(x.T.flatten() == 1)[0]
@@ -503,4 +517,4 @@ if __name__ == '__main__':
         test(model)
     else:
         print("'{}' is not recognized. "
-              "Use 'train' or 'splash'".format(args.command))
+              "Use 'train','splash' or 'test'".format(args.command))
