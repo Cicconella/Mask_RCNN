@@ -281,7 +281,7 @@ def train(model):
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
                 epochs= config.EPOCHS,
-                layers='5+')
+                layers='3+')
 
 def test(model):
     """Train the model."""
