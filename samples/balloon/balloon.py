@@ -75,18 +75,18 @@ class BalloonConfig(Config):
     NUM_CLASSES = 1 + 1  # Background + baloon
 
     # Number of training steps per epoch
-    STEPS_PER_EPOCH = 100
+    STEPS_PER_EPOCH = 10
 
     # Skip detections with < 90% confidence
     DETECTION_MIN_CONFIDENCE = 0.9
 
 class DSBConfig(Config):
     NAME = "DSB"
-    IMAGES_PER_GPU = 5
+    IMAGES_PER_GPU = 2
     NUM_CLASSES = 2
-    STEPS_PER_EPOCH = 100
-    EPOCHS = 50
-    DETECTION_MIN_CONFIDENCE = 0.9
+    STEPS_PER_EPOCH = 200
+    EPOCHS = 100
+    DETECTION_MIN_CONFIDENCE = 0.7
 
 ############################################################
 #  Dataset
@@ -199,7 +199,7 @@ class DSBDataset(utils.Dataset):
 
         # Train or validation dataset?
         if subset == "train" or subset == "val":
-            dataset_dir = os.path.join(dataset_dir, "TRAIN/")
+            dataset_dir = os.path.join(dataset_dir, "TRAINCLAHE/")
         elif subset == 'test':
             dataset_dir = os.path.join(dataset_dir, "TEST/")
         else:
@@ -282,7 +282,7 @@ def train(model):
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
                 epochs= config.EPOCHS,
-                layers='heads')
+                layers='all') #heads
 
 def test(model):
     """Train the model."""
@@ -316,7 +316,6 @@ def test(model):
             m = mask[:,:,nuc]
             l = ' '.join([ str(x) for x in rle_encoding(m)])
             strin = "%s,%s" % (im_name, l)
-            print(strin)
             output.write(strin+"\n")
 
     output.close()
