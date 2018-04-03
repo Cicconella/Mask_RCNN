@@ -101,6 +101,7 @@ def display_instances(image, boxes, masks, class_ids, class_names,
     height, width = image.shape[:2]
     ax.set_ylim(height + 10, -10)
     ax.set_xlim(-10, width + 10)
+    ax.set_xlim(-10, width + 10)
     ax.axis('off')
     ax.set_title(title)
 
@@ -241,6 +242,8 @@ def display_top_masks(image, mask, class_ids, class_names, limit=4):
         to_display.append(m)
         titles.append(class_names[class_id] if class_id != -1 else "-")
     display_images(to_display, titles=titles, cols=limit + 1, cmap="Blues_r")
+
+    return to_display
 
 
 def plot_precision_recall(AP, precisions, recalls):
