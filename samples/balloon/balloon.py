@@ -81,11 +81,11 @@ class BalloonConfig(Config):
 
 class DSBConfig(Config):
     NAME = "DSB"
-    IMAGES_PER_GPU = 5
+    IMAGES_PER_GPU = 1
     NUM_CLASSES = 2
-    STEPS_PER_EPOCH = 100
-    EPOCHS = 150
-    DETECTION_MIN_CONFIDENCE = 0.8
+    STEPS_PER_EPOCH = 2
+    EPOCHS = 2
+    DETECTION_MIN_CONFIDENCE = 0.7
 
 ############################################################
 #  Dataset
@@ -281,7 +281,7 @@ def train(model):
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
                 epochs= config.EPOCHS,
-                layers='5+')
+                layers='4+') #heads
 
 def test(model):
     """Train the model."""
