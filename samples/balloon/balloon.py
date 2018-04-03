@@ -81,10 +81,10 @@ class BalloonConfig(Config):
 
 class DSBConfig(Config):
     NAME = "DSB"
-    IMAGES_PER_GPU = 1
+    IMAGES_PER_GPU = 2
     NUM_CLASSES = 2
-    STEPS_PER_EPOCH = 2
-    EPOCHS = 2
+    STEPS_PER_EPOCH = 5
+    EPOCHS = 3
     DETECTION_MIN_CONFIDENCE = 0.7
 
 ############################################################
