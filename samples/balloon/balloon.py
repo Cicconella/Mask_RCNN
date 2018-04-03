@@ -83,8 +83,8 @@ class DSBConfig(Config):
     NAME = "DSB"
     IMAGES_PER_GPU = 2
     NUM_CLASSES = 2
-    STEPS_PER_EPOCH = 100
-    EPOCHS = 4
+    STEPS_PER_EPOCH = 200
+    EPOCHS = 100
     DETECTION_MIN_CONFIDENCE = 0.7
 
 ############################################################
