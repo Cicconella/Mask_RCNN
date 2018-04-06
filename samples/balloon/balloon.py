@@ -34,6 +34,7 @@ import datetime
 import numpy as np
 import skimage
 from tqdm import tqdm
+sys.path.insert(0, '/home/cicconella/Mask_RCNN')
 import visualize
 
 # Root directory of the project
