@@ -253,16 +253,16 @@ def detect_and_color_splash(model, image_path=None, video_path=None):
         # Run model detection and generate the color splash effect
         print("Running on {}".format(args.image))
         # Read image
-        img = skimage.io.imread(args.image, as_grey=False)
+        img = skimage.io.imread(args.image)
         print("Image shape is ", img.shape)
-        # Detect objects
+        # Detect objects #Needs Colored images!
         r = model.detect([img], verbose=1)[0]
         # Color splash
         splash = color_splash(img, r['masks'])
         #boxes = visualize.display_top_masks(image, r['masks'], class_ids=[0], class_names=['nuclei'], limit=1)
         #print(boxes)
         print(r.keys())
-        boxes = visualize.draw_boxes(img,boxes=r['boxes'], masks=r['masks'])
+        boxes = visualize.draw_boxes(img,boxes=r['rois'], masks=r['masks'])
         # Save output
         file_name = "splash_{:%Y%m%dT%H%M%S}.png".format(datetime.datetime.now())
         skimage.io.imsave(file_name, splash)
