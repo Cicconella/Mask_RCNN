@@ -34,6 +34,7 @@ import datetime
 import numpy as np
 import skimage
 from tqdm import tqdm
+import visualize
 
 # Root directory of the project
 ROOT_DIR = os.getcwd()
@@ -377,9 +378,15 @@ def detect_and_color_splash(model, image_path=None, video_path=None):
         r = model.detect([image], verbose=1)[0]
         # Color splash
         splash = color_splash(image, r['masks'])
+        #boxes = visualize.display_top_masks(image, r['masks'], class_ids=[0], class_names=['nuclei'], limit=1)
+        #print(boxes)
+        print(r.keys())
+        boxes = visualize.draw_boxes(image,boxes=r['boxes'], masks=r['masks'])
         # Save output
         file_name = "splash_{:%Y%m%dT%H%M%S}.png".format(datetime.datetime.now())
         skimage.io.imsave(file_name, splash)
+        file_name = "boxes_{:%Y%m%dT%H%M%S}.png".format(datetime.datetime.now())
+        skimage.io.imsave(file_name, boxes)
     elif video_path:
         import cv2
         # Video capture
