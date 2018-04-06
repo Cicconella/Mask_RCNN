@@ -35,15 +35,17 @@ import numpy as np
 import skimage
 from tqdm import tqdm
 
+import tensorflow as tf
+
 # Root directory of the project
-ROOT_DIR = os.getcwd()
-if ROOT_DIR.endswith("samples/balloon"):
+ROOT_DIR = '/home/cicconella/Mask_RCNN'
+#if ROOT_DIR.endswith("samples/balloon"):
     # Go up two levels to the repo root
-    ROOT_DIR = os.path.dirname(os.path.dirname(ROOT_DIR))
+#    ROOT_DIR = os.path.dirname(os.path.dirname(ROOT_DIR))
 
 # Import Mask RCNN
-#sys.path.append(ROOT_DIR)
-sys.path.append('/home/cicconella/Mask_RCNN')
+sys.path.append(ROOT_DIR)
+#sys.path.append('/home/cicconella/Mask_RCNN')
 from config import Config
 import utils
 import model as modellib
