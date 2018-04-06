@@ -34,8 +34,6 @@ import datetime
 import numpy as np
 import skimage
 from tqdm import tqdm
-sys.path.insert(0, '/home/cicconella/Mask_RCNN')
-import visualize
 
 # Root directory of the project
 ROOT_DIR = os.getcwd()
@@ -45,9 +43,11 @@ if ROOT_DIR.endswith("samples/balloon"):
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)
+#sys.path.insert(0, '/home/cicconella/Mask_RCNN')
 from config import Config
 import utils
 import model as modellib
+import visualize
 
 # Path to trained weights file
 COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
