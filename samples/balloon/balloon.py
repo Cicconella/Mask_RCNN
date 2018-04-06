@@ -42,8 +42,8 @@ if ROOT_DIR.endswith("samples/balloon"):
     ROOT_DIR = os.path.dirname(os.path.dirname(ROOT_DIR))
 
 # Import Mask RCNN
-sys.path.append(ROOT_DIR)
-#sys.path.insert(0, '/home/cicconella/Mask_RCNN')
+#sys.path.append(ROOT_DIR)
+sys.path.append('/home/cicconella/Mask_RCNN')
 from config import Config
 import utils
 import model as modellib
