@@ -187,11 +187,12 @@ def test(model):
         print("Running on {}, shape = {}, max pixel = {}".format(im, image.shape, image.shape[0]*image.shape[1]-1))
         # Detect objects
         r = model.detect([image], verbose=0)[0]
+        mask = r['masks']
         s = mask.shape
         print("Mask Shape = ", s)
-        mask = remove_all_overlaps(r['masks'])
+        mask = remove_all_overlaps(mask)
         if s[0]==0:
-            print("Empty mask?")
+            print("Sem nucleos?")
             continue
         for nuc in range(s[2]):
             m = mask[:,:,nuc]
