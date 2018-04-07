@@ -190,7 +190,8 @@ def test(model):
         mask = remove_all_overlaps(r['masks'])
         s = mask.shape
         dots = np.where(mask.T.flatten() == 1)[0]
-        print("Number of 1 pixels = {}, mas pixel = {}".format(len(dots),max(dots)))
+        print("Mask Shape = ", mask.shape)
+        print("Number of 1 pixels = {}, max 1 pixel = {}".format(len(dots),max(dots)))
         if s[0]==0:
             continue
         for nuc in range(s[2]):
