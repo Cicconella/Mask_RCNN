@@ -33,6 +33,9 @@ import numpy as np
 import skimage
 from tqdm import tqdm
 
+import matplotlib
+matplotlib.use('Agg')
+
 # Root directory of the project
 ROOT_DIR = '/home/cicconella/Mask_RCNN'
 HOME_DIR = '/home/cicconella'
