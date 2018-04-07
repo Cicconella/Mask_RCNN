@@ -65,7 +65,10 @@ class DSBConfig(Config):
     NUM_CLASSES = 2
     STEPS_PER_EPOCH = 300
     EPOCHS = 50
-    DETECTION_MIN_CONFIDENCE = 0.7
+    DETECTION_MIN_CONFIDENCE = 0.6
+    DETECTION_MAX_INSTANCES = 500
+    RPN_TRAIN_ANCHORS_PER_IMAGE = 500 #default era 250
+
 
 ############################################################
 #  Dataset
