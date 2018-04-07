@@ -187,6 +187,7 @@ def test(model):
     output.write("ImageId,EncodedPixels\n")
     for im in dataset_test.image_ids:
         # Run model detection and generate rle
+        im_dir = dataset_test.image_info[im]["dir"]
         im_path = dataset_test.image_info[im]["path"]
         im_name = dataset_test.image_info[im]["id"]
         image = skimage.io.imread(im_path)
@@ -211,6 +212,12 @@ def test(model):
             l = ' '.join([ str(x) for x in rle_encoding(m)])
             strin = "%s,%s" % (im_name, l)
             output.write(strin+"\n")
+
+        #Create Splash Image
+        boxes = visualize.boxes_fig(image, boxes=r['rois'], masks=r['masks'])
+        # Save output
+        file_name = "splash/"+im_name+".png"
+        skimage.io.imsave(file_name, boxes)
 
     output.close()
 
