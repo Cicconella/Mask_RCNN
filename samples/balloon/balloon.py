@@ -189,13 +189,13 @@ def test(model):
         r = model.detect([image], verbose=0)[0]
         mask = remove_all_overlaps(r['masks'])
         s = mask.shape
-        dots = np.where(mask.T.flatten() == 1)[0]
         print("Mask Shape = ", mask.shape)
         if s[0]==0:
             continue
         for nuc in range(s[2]):
             m = mask[:,:,nuc]
-            print("Nucleo {}, Number of 1 pixels = {}, max 1 pixel = {}".format(m,len(m), max(m)))
+            dots = np.where(mask.T.flatten() == 1)[0]
+            print("Nucleo {}, Number of 1 pixels = {}, max 1 pixel = {}".format(m,len(dots), max(dots)))
             l = ' '.join([ str(x) for x in rle_encoding(m)])
             strin = "%s,%s" % (im_name, l)
             output.write(strin+"\n")
