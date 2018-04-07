@@ -180,16 +180,17 @@ def test(model):
     output = open("sub.csv","w")
     output.write("ImageId,EncodedPixels\n")
     for im in dataset_test.image_ids:
-        # Run model detection and generate the color splash effect
-        print("Running on {}".format(im))
-        # Read image
+        # Run model detection and generate rle
         im_path = dataset_test.image_info[im]["path"]
         im_name = dataset_test.image_info[im]["id"]
         image = skimage.io.imread(im_path)
+        print("Running on {}, shape = {}, max pixel = {}".format(im, im.shape, im.shape[0]*im.shape[1]-1))
         # Detect objects
         r = model.detect([image], verbose=0)[0]
         mask = remove_all_overlaps(r['masks'])
         s = mask.shape
+        dots = np.where(mask.T.flatten() == 1)[0]
+        print("Number of 1 pixels = {}, mas pixel = {}".format(len(dots),max(dots)))
         if s[0]==0:
             continue
         for nuc in range(s[2]):
