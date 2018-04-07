@@ -187,15 +187,17 @@ def test(model):
         print("Running on {}, shape = {}, max pixel = {}".format(im, image.shape, image.shape[0]*image.shape[1]-1))
         # Detect objects
         r = model.detect([image], verbose=0)[0]
-        mask = remove_all_overlaps(r['masks'])
         s = mask.shape
-        print("Mask Shape = ", mask.shape)
+        print("Mask Shape = ", s)
+        mask = remove_all_overlaps(r['masks'])
         if s[0]==0:
+            print("Empty mask?")
             continue
         for nuc in range(s[2]):
             m = mask[:,:,nuc]
             dots = np.where(m.T.flatten() == 1)[0]
-            print("Nucleo {}, Number of 1 pixels = {}, max 1 pixel = {}".format(nuc,len(dots), max(dots)))
+            if max(dots) >= image.shape[0]*image.shape[1]-1:
+                print("Nucleo {}, Number of 1 pixels = {}, max 1 pixel = {}".format(nuc,len(dots), max(dots)))
             l = ' '.join([ str(x) for x in rle_encoding(m)])
             strin = "%s,%s" % (im_name, l)
             output.write(strin+"\n")
