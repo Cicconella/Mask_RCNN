@@ -197,7 +197,9 @@ def test(model):
         for nuc in range(s[2]):
             m = mask[:,:,nuc]
             dots = np.where(m.T.flatten() == 1)[0]
-            if max(dots) >= image.shape[0]*image.shape[1]-1:
+            if len(dots) == 0:
+                print("Nucleo com mascara vazia!")
+            if len(dots)>0 and max(dots) >= image.shape[0]*image.shape[1]-1:
                 print("Nucleo {}, Number of 1 pixels = {}, max 1 pixel = {}".format(nuc,len(dots), max(dots)))
             l = ' '.join([ str(x) for x in rle_encoding(m)])
             strin = "%s,%s" % (im_name, l)
