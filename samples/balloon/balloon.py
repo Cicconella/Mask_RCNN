@@ -184,7 +184,7 @@ def test(model):
         im_path = dataset_test.image_info[im]["path"]
         im_name = dataset_test.image_info[im]["id"]
         image = skimage.io.imread(im_path)
-        print("Running on {}, shape = {}, max pixel = {}".format(image, image.shape, image.shape[0]*image.shape[1]-1))
+        print("Running on {}, shape = {}, max pixel = {}".format(im, image.shape, image.shape[0]*image.shape[1]-1))
         # Detect objects
         r = model.detect([image], verbose=0)[0]
         mask = remove_all_overlaps(r['masks'])
