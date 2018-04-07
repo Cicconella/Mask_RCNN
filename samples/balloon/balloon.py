@@ -189,7 +189,7 @@ def test(model):
         r = model.detect([image], verbose=0)[0]
         mask = r['masks']
         s = mask.shape
-        print("Mask Shape = ", s)
+        #print("Mask Shape = ", s)
         mask = remove_all_overlaps(mask)
         if s[0]==0:
             print("Sem nucleos?")
@@ -198,7 +198,8 @@ def test(model):
             m = mask[:,:,nuc]
             dots = np.where(m.T.flatten() == 1)[0]
             if len(dots) == 0:
-                print("Nucleo com mascara vazia!")
+                print("Nucleo {} de {}({}) com mascara vazia!".format(nuc,im,im_name))
+                continue
             if len(dots)>0 and max(dots) >= image.shape[0]*image.shape[1]-1:
                 print("Nucleo {}, Number of 1 pixels = {}, max 1 pixel = {}".format(nuc,len(dots), max(dots)))
             l = ' '.join([ str(x) for x in rle_encoding(m)])
@@ -217,8 +218,8 @@ def remove_all_overlaps(mask):
 def remove_overlap(m1,m2):
     inter = m1*m2
     i =inter.flatten()
-    if max(i) > 0:
-        print("Overlap entre mascaras, tamanho =",len(i[i>0]))
+    # if max(i) > 0:
+    #     print("Overlap entre mascaras, tamanho =",len(i[i>0]))
     return m1-inter,m2
 
 def rle_encoding(x):
