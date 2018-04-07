@@ -195,7 +195,7 @@ def test(model):
         for nuc in range(s[2]):
             m = mask[:,:,nuc]
             dots = np.where(mask.T.flatten() == 1)[0]
-            print("Nucleo {}, Number of 1 pixels = {}, max 1 pixel = {}".format(m,len(dots), max(dots)))
+            print("Nucleo {}, Number of 1 pixels = {}, max 1 pixel = {}".format(nuc,len(dots), max(dots)))
             l = ' '.join([ str(x) for x in rle_encoding(m)])
             strin = "%s,%s" % (im_name, l)
             output.write(strin+"\n")
