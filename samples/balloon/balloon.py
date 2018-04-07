@@ -191,11 +191,11 @@ def test(model):
         s = mask.shape
         dots = np.where(mask.T.flatten() == 1)[0]
         print("Mask Shape = ", mask.shape)
-        print("Number of 1 pixels = {}, max 1 pixel = {}".format(len(dots),max(dots)))
         if s[0]==0:
             continue
         for nuc in range(s[2]):
             m = mask[:,:,nuc]
+            print("Nucleo {}, Number of 1 pixels = {}, max 1 pixel = {}".format(m,len(m), max(m)))
             l = ' '.join([ str(x) for x in rle_encoding(m)])
             strin = "%s,%s" % (im_name, l)
             output.write(strin+"\n")
